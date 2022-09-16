@@ -1,0 +1,62 @@
+{% capture email_title %}Confirm you want to receive email marketing{% endcapture %}
+{% capture email_body %}You need to confirm that you want to receive marketing updates from us. If you didn’t subscribe, then you don’t need to do anything.{% endcapture %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{ email_title }}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" type="text/css" href="/assets/notifications/styles.css">
+
+    <!-- inject-style src="./styles.min.css" -->
+  </head>
+
+  <body>
+    <table class="body">
+      <tr>
+        <td>
+          @@include('./snippets/header.liquid')
+
+          <table class="row content">
+            <tr>
+              <td class="content__cell">
+                <center>
+                  <table class="container">
+                    <tr>
+                      <td>
+                        
+                      <h2>{{ email_title }}</h2>
+                      <p>{{ email_body }}</p>
+
+                      {% if shop.url %}
+                        <table class="row actions">
+                          <tr>
+                            <td class="actions__cell">
+                              <table class="button main-action-cell">
+                                <tr>
+                                  <td class="button__cell">
+                                    <a class="button__text" href="{{ customer.subscribe_url }}">Subscribe</a>
+                                    </a>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                      {% endif %}
+
+                      </td>
+                    </tr>
+                  </table>
+                </center>
+              </td>
+            </tr>
+          </table>
+
+          @@include('./snippets/footer.liquid')
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

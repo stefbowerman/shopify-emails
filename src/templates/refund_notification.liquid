@@ -1,0 +1,237 @@
+{% if refund_line_items.size == item_count %}
+  {% capture email_title %}Your order has been refunded{% endcapture %}
+{% elsif refund_line_items.size == 0 %}
+  {% capture email_title %}You have received a refund{% endcapture %}
+{% else %}
+  {% capture email_title %}Some items in your order have been refunded{% endcapture %}
+{% endif %}
+{% capture email_body %}Total amount refunded: <strong>{{ amount | money }}</strong>{% endcapture %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{ email_title }}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" type="text/css" href="/assets/notifications/styles.css">
+
+    <!-- inject-style src="./styles.min.css" -->
+  </head>
+
+  <body>
+    <table class="body">
+      <tr>
+        <td>
+          @@include('./snippets/header.liquid')
+
+          <table class="row content">
+            <tr>
+              <td class="content__cell">
+                <center>
+                  <table class="container">
+                    <tr>
+                      <td>
+                        
+                      <h2>{{ email_title }}</h2>
+                      <p>{{ email_body }}</p>
+
+                      </td>
+                    </tr>
+                  </table>
+                </center>
+              </td>
+            </tr>
+          </table>
+
+          <table class="row section">
+            <tr>
+              <td class="section__cell">
+                <center>
+                  <table class="container">
+                    <tr>
+                      <td>
+                        <h3>Order summary</h3>
+                      </td>
+                    </tr>
+                  </table>
+                  <table class="container">
+                    <tr>
+                      <td>
+                        <table class="row">
+                          {% for line in subtotal_line_items %}
+                            @@include('./snippets/order_list_item.liquid')
+                          {% endfor %}
+                        </table>
+
+                        <table class="row subtotal-lines">
+                          <tr>
+                            <td class="subtotal-spacer"></td>
+                            <td>
+                              <table class="row subtotal-table">
+                                @@include('./snippets/subtotal_table_discount_lines.liquid')
+
+
+                                
+                                @@include('./snippets/subtotal_table_subtotal_line.liquid')
+
+
+                                @@include('./snippets/subtotal_table_shipping_line.liquid')
+
+
+                                {% if total_duties %}
+                                  <tr class="subtotal-line">
+                                    <td class="subtotal-line__title">
+                                      <p>
+                                        <span>Duties</span>
+                                      </p>
+                                    </td>
+                                    <td class="subtotal-line__value">
+                                      <strong>{{ total_duties | money }}</strong>
+                                    </td>
+                                  </tr>
+                                {% endif %}
+
+                                <tr class="subtotal-line">
+                                  <td class="subtotal-line__title">
+                                    <p>
+                                      <span>Taxes</span>
+                                    </p>
+                                  </td>
+                                  <td class="subtotal-line__value">
+                                    <strong>{{ tax_price | money }}</strong>
+                                  </td>
+                                </tr>
+
+                                @@include('./snippets/subtotal_table_tip_line.liquid')
+                              </table>
+
+                              {% assign transaction_size = 0 %}
+                              {% assign transaction_amount = 0 %}
+                              {% for transaction in transactions %}
+                                {% unless transaction.kind == "capture" or transaction.kind == "void" %}
+                                  {% assign transaction_size = transaction_size | plus: 1 %}
+                                  {% assign transaction_amount = transaction_amount | plus: transaction.amount %}
+                                {% endunless %}
+                              {% endfor %}
+
+                              <table class="row subtotal-table subtotal-table--total">
+                                {% if payment_terms %}
+                                  {% assign due_at_date = payment_terms.next_payment.due_at | date: "%b %d, %Y" %}
+                                  
+                                  <tr class="subtotal-line">
+                                    <td class="subtotal-line__title">
+                                      <p>
+                                        <span>Total paid today</span>
+                                      </p>
+                                    </td>
+                                    <td class="subtotal-line__value">
+                                      <strong>{{ transaction_amount | money }}</strong>
+                                    </td>
+                                  </tr>
+
+                                  <div class="payment-terms">
+                                    
+                                    <tr class="subtotal-line">
+                                      <td class="subtotal-line__title">
+                                        <p>
+                                          <span>Total due {{ due_at_date }}</span>
+                                        </p>
+                                      </td>
+                                      <td class="subtotal-line__value">
+                                        <strong>{{ payment_terms.next_payment.amount_due | money }}</strong>
+                                      </td>
+                                    </tr>
+
+                                  </div>
+                                {% else %}
+                                  
+                                  <tr class="subtotal-line">
+                                    <td class="subtotal-line__title">
+                                      <p>
+                                        <span>Total</span>
+                                      </p>
+                                    </td>
+                                    <td class="subtotal-line__value">
+                                      <strong>{{ total_price | money }}</strong>
+                                    </td>
+                                  </tr>
+
+                                {% endif %}
+                              </table>
+
+                              {% if total_discounts > 0 %}
+                                <p class="total-discount">
+                                  You saved <span class="total-discount--amount">{{ total_discounts | money }}</span>
+                                </p>
+                              {% endif %}
+
+                              {% unless payment_terms %}
+                                {% if transaction_size > 1 or transaction_amount < total_price %}
+                                  <table class="row subtotal-table">
+                                    <tr><td colspan="2" class="subtotal-table__line"></td></tr>
+                                    <tr><td colspan="2" class="subtotal-table__small-space"></td></tr>
+
+                                    {% for transaction in transactions %}
+                                      {% if transaction.status == "success" and transaction.kind == "authorization" or transaction.kind == "sale" %}
+                                        {% if transaction.payment_details.credit_card_company %}
+                                          {% capture transaction_name %}{{ transaction.payment_details.credit_card_company }} (ending in {{ transaction.payment_details.credit_card_last_four_digits }}){% endcapture %}
+                                        {% else %}
+                                          {% capture transaction_name %}{{ transaction.gateway_display_name }}{% endcapture %}
+                                        {% endif %}
+
+                                        
+                                        <tr class="subtotal-line">
+                                          <td class="subtotal-line__title">
+                                            <p>
+                                              <span>{{transaction_name}}</span>
+                                            </p>
+                                          </td>
+                                          <td class="subtotal-line__value">
+                                            <strong>{{ transaction.amount | money }}</strong>
+                                          </td>
+                                        </tr>
+
+                                      {% endif %}
+                                      {% if transaction.kind == 'refund' %}
+                                        {% if transaction.payment_details.credit_card_company %}
+                                          {% assign refund_method_title = transaction.payment_details.credit_card_company %}
+                                        {% else %}
+                                          {% assign refund_method_title = transaction.gateway %}
+                                        {% endif %}
+
+                                        
+                                        <tr class="subtotal-line">
+                                          <td class="subtotal-line__title">
+                                            <p>
+                                              <span>Refund</span>
+                                                <br>
+                                                <small>{{ refund_method_title | capitalize }}</small>
+                                            </p>
+                                          </td>
+                                          <td class="subtotal-line__value">
+                                            <strong>- {{ transaction.amount | money }}</strong>
+                                          </td>
+                                        </tr>
+
+                                      {% endif %}
+                                    {% endfor %}
+                                  </table>
+                                {% endif %}
+                              {% endunless %}
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </center>
+              </td>
+            </tr>
+          </table>
+
+          @@include('./snippets/footer.liquid')
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

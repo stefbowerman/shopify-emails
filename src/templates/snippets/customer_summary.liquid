@@ -1,0 +1,72 @@
+{% if shipping_address or billing_address or shipping_method %}
+  <table class="row section">
+    <tr>
+      <td class="section__cell">
+        <center>
+          <table class="container">
+            <tr>
+              <td>
+                
+              <table class="row">
+                <tr>
+                  {% if requires_shipping and shipping_address %}
+                  <td class="customer-info__item">
+                    <h4>Shipping address</h4>
+                    {{ shipping_address | format_address }}
+                  </td>
+                  {% endif %}
+                  {% if billing_address %}
+                  <td class="customer-info__item">
+                    <h4>Billing address</h4>
+                    {{ billing_address | format_address }}
+                  </td>
+                  {% endif %}
+                </tr>
+              </table>
+              <table class="row">
+                <tr>
+                  {% if requires_shipping and shipping_address %}
+                  <td class="customer-info__item">
+                    <h4>Shipping method</h4>
+                    <p>{{ shipping_method.title }}</p>
+                  </td>
+                  {% endif %}
+                  {% assign transaction_count = transactions | size %}
+                  {% if transaction_count > 0 %}
+                  <td class="customer-info__item">
+                    <h4>Payment method</h4>
+                    {% for transaction in transactions %}
+                      {% if transaction.status == "success" or transaction.status == "pending" %}
+                        {% if transaction.kind == "authorization" or transaction.kind == "sale" %}
+                          {% if transaction.payment_details.credit_card_company %}
+                              <p class="customer-info__item-content">
+                                <img src="{{ transaction.payment_details.credit_card_company | payment_icon_png_url  }}" class="customer-info__item-credit" height="24" alt="{{ transaction.payment_details.credit_card_company }}">
+                                <span>ending with {{ transaction.payment_details.credit_card_last_four_digits }} — <strong>{{ transaction.amount | money }}</strong></span>
+                              </p>
+                            {% elsif transaction.gateway_display_name == "Gift card" %}
+                            <p class="customer-info__item-content">
+                              <img src="{{ transaction.gateway_display_name | downcase | replace: ' ', '-'  | payment_type_img_url }}" class="customer-info__item-credit" height="24">
+                            ending with {{ transaction.payment_details.gift_card.last_four_characters | upcase }} — <strong>{{ transaction.amount | money }}</strong> <br />
+                                  Gift card balance: {{ transaction.payment_details.gift_card.balance |  money }}
+                            </p>
+                            {% else %}
+                                <p class="customer-info__item-content">
+                                {{ transaction.gateway_display_name }} — <strong>{{ transaction.amount | money }}</strong>
+                                </p>
+                            {% endif %}
+                    {% endif %}
+                      {% endif %}
+                    {% endfor %}
+                  </td>
+                  {% endif %}
+                </tr>
+              </table>
+
+              </td>
+            </tr>
+          </table>
+        </center>
+      </td>
+    </tr>
+  </table>
+{% endif %}

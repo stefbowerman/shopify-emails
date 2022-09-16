@@ -1,0 +1,13 @@
+{% if total_tip and total_tip > 0 %}
+  <tr class="subtotal-line">
+    <td class="subtotal-line__title">
+      <p>
+        <span>Tip</span>
+      </p>
+    </td>
+    <td class="subtotal-line__value">
+      <strong>{{ total_tip | money }}</strong>
+    </td>
+  </tr>
+{% endif %}
+</table>

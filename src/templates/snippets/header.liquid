@@ -1,0 +1,33 @@
+<table class="header row">
+  <tr>
+    <td class="header__cell">
+      <center>
+        <table class="container">
+          <tr>
+            <td>
+              <center>
+                <table class="row">
+                  <tr>
+                    <td class="shop-name__cell">
+                      <img src="https://cdn.shopify.com/s/files/1/0656/4016/9712/files/email-logo-DO-NOT-DELETE-2.jpg?v=1661226582" alt="{{ shop.name }}" width="642" height="284">
+                    </td>
+
+                    {% if unsubscribe_url %}
+                      {% comment %} Don't show for abandoned checkout emails {% endcomment %}
+                    {% elsif order_name and order_name != blank %}
+                      <td class="order-number__cell">
+                        <span class="order-number__text">
+                          Order {{ order_name }}
+                        </span>
+                      </td>
+                    {% endif %}
+                  </tr>
+                </table>
+              </center>
+            </td>
+          </tr>
+        </table>
+      </center>
+    </td>
+  </tr>
+</table>

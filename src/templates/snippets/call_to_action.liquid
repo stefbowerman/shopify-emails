@@ -1,0 +1,116 @@
+{% if order_status_url %}
+  <table class="row actions">
+    <tr>
+      <td class="empty-line"> </td>
+    </tr>
+    <tr>
+      <td class="actions__cell">
+        <table class="button main-action-cell">
+          <tr>
+            <td class="button__cell"><a href="{{ order_status_url }}" class="button__text">View Your Order</a></td>
+          </tr>
+        </table>
+        {% if shop.url %}
+          <table class="link secondary-action-cell">
+            <tr>
+              <td class="link__cell">or <a href="{{ shop.url }}">Visit our store</a></td>
+            </tr>
+          </table>
+        {% endif %}                                
+      </td>
+    </tr>
+  </table>
+{% elsif unsubscribe_url %}
+  {% comment %} Abandoned checkout {% endcomment %}
+  <table class="row actions">
+    <tr>
+      <td class="empty-line">&nbsp;</td>
+    </tr>
+    <tr>
+      <td class="actions__cell">
+        <table class="button main-action-cell">
+          <tr>
+            <td class="button__cell"><a href="{{ url }}" class="button__text">Items in your cart</a></td>
+          </tr>
+        </table>
+        {% if shop.url %}
+          <table class="link secondary-action-cell">
+            <tr>
+              <td class="link__cell">or <a href="{{ shop.url }}">Visit our store</a></td>
+            </tr>
+          </table>
+        {% endif %}
+      </td>
+    </tr>
+  </table>
+{% elsif checkout_payment_collection_url %}
+  {% comment %} Pending payment failure {% endcomment %}
+  <table class="row actions">
+    <tr>
+      <td class="actions__cell">
+        <table class="button main-action-cell">
+          <tr>
+            <td class="button__cell"><a href="{{ checkout_payment_collection_url }}" class="button__text">Pay now</a></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+{% elsif invoice_url %}
+  <table class="row actions">
+    <tr>
+      <td class="actions__cell">
+        <table class="button main-action-cell">
+          <tr>
+            <td class="button__cell"><a href="{{ invoice_url }}" class="button__text">Complete your purchase</a></td>
+          </tr>
+        </table>
+        
+        {% if shop.url %}
+          <table class="link secondary-action-cell">
+            <tr>
+              <td class="link__cell">or <a href="{{ shop.url }}">Visit our store</a></td>
+            </tr>
+          </table>
+        {% endif %}
+      </td>
+    </tr>
+  </table>
+{% elsif customer %}
+  <table class="row actions">
+    <tr>
+      <td class="empty-line">&nbsp;</td>
+    </tr>
+    <tr>
+      <td class="actions__cell">
+        <table class="button main-action-cell">
+          <tr>
+            @@customer_button
+          </tr>
+        </table>
+        
+        {% if shop.url %}
+          <table class="link secondary-action-cell">
+            <tr>
+              <td class="link__cell">or <a href="{{ shop.url }}">Visit our store</a></td>
+            </tr>
+          </table>
+        {% endif %}
+      </td>
+    </tr>
+  </table>
+{% else %}
+  {% if shop.url %}
+    <table class="row actions">
+      <tr>
+        <td class="actions__cell">
+          <table class="button main-action-cell">
+            <tr>
+              <td class="button__cell"><a href="{{ shop.url }}" class="button__text">Visit our store</a></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  {% endif %}
+{% endif %}

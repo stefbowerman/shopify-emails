@@ -1,0 +1,47 @@
+{% capture email_title %}Reset your password{% endcapture %}
+{% capture email_body %}Follow this link to reset your customer account password at <a href="{{shop.url}}">{{shop.name}}</a>. If you didn't request a new password, you can safely delete this email.{% endcapture %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{ email_title }}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" type="text/css" href="/assets/notifications/styles.css">
+
+    <!-- inject-style src="./styles.min.css" -->
+  </head>
+
+  <body>
+    <table class="body">
+      <tr>
+        <td>
+          @@include('./snippets/header.liquid')
+
+          <table class="row content">
+            <tr>
+              <td class="content__cell">
+                <center>
+                  <table class="container">
+                    <tr>
+                      <td>
+                        <h2>{{ email_title }}</h2>
+                        <p>{{ email_body }}</p>
+
+                        @@include('./snippets/call_to_action.liquid', {
+                          "customer_button": '<td class="button__cell"><a href="{{ customer.reset_password_url }}" class="button__text">Reset your password</a></td>'
+                        })
+                      </td>
+                    </tr>
+                  </table>
+                </center>
+              </td>
+            </tr>
+          </table>
+          @@include('./snippets/footer.liquid')
+
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

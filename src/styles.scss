@@ -1,0 +1,391 @@
+/* Style sheet for transaction notifications */
+
+@font-face {
+  font-family: 'Walter';
+  src: url('https://cdn.shopify.com/s/files/1/0656/4016/9712/files/ABCWalterAlte-Rauchwaren-EMAIL.woff2?v=1661226874') format('woff2'),
+      url('https://cdn.shopify.com/s/files/1/0656/4016/9712/files/ABCWalterAlte-Rauchwaren-EMAIL.woff?v=1661226874') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap; 
+}
+
+@font-face {
+  font-family: 'Walter';
+  src: url('https://cdn.shopify.com/s/files/1/0656/4016/9712/files/ABCWalterAlte-Roentgentherapie-EMAIL.woff2?v=1661226874') format('woff2'),
+      url('https://cdn.shopify.com/s/files/1/0656/4016/9712/files/ABCWalterAlte-Roentgentherapie-EMAIL.woff?v=1661226874') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap; 
+}   
+
+
+$color-black:       #0d0d0d;
+$color-dark-grey:   #262626;
+$color-grey:        #404040;
+$color-light-gray:  #808080;
+$color-off-white:   #e5e5e5;
+$color-white:       #FFF;
+$color-red: red;
+
+$color-neon: #dcff00;
+$color-purple: #7a25f0;
+
+$font-family-base:     'Walter', Helvetica Neue, Helvetica, Arial, sans-serif;
+$font-family-headings: $font-family-base;
+
+$font-size-base:       16px;
+$font-size-mobile:     16px;
+$font-weight-base:     400;
+$line-height-base:     1.2;
+$text-color:           $color-off-white;
+$body-bg:              $color-black;
+$letter-spacing-base:  -0.03em;
+
+body,
+.body {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  font-weight: $font-weight-base;
+  line-height: $line-height-base;
+  color: $text-color;
+  text-align: left;
+  background-color: $body-bg;
+  letter-spacing: $letter-spacing-base;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  // Fix for the numbers in 'Walter'
+  font-variant-numeric: lining-nums;
+  font-variant: lining-nums;
+
+  @media (prefers-color-scheme: dark) {
+    color: $text-color !important;
+    background-color: $body-bg !important;
+  }
+
+  @media screen and (max-width: 600px) {
+    font-size: $font-size-mobile !important;
+  }
+}
+
+.body,
+.order-number__cell,
+.order-list__price-cell,
+.order-list__product-description-cell,
+.order-list__item-title,
+.order-list__item-price,
+.order-list__item-original-price,
+.order-list__item-variant,
+.order-list__item-quantity,
+.order-list__item-sku,
+.order-list__item-refunded,
+.subtotal-line__title span,
+.subtotal-line__value,
+.subtotal-line__value strong,
+.content__cell strong,
+.order-number__text,
+.customer-info__item-content span,
+.customer-info__item-content strong,
+.disclaimer__subtext,
+.disclaimer__subtext a,
+.return-label__instruction-step,
+.container p,
+.button__cell,
+.shop-name__text a,
+.link__cell a {
+  color: $text-color;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  font-weight: $font-weight-base;
+  margin: 0;
+
+  @media (prefers-color-scheme: dark) {
+    color: $text-color !important;
+  }
+
+  @media screen and (max-width: 600px) {
+    font-size: $font-size-mobile !important;
+  }  
+}
+
+.order-list__item-title,
+.order-list__item-variant {
+  font-size: $font-size-base - 1px !important;
+
+  @media screen and (max-width: 600px) {
+    font-size: $font-size-mobile - 1px !important;
+  }  
+}
+
+.subtotal-line__value strong,
+.button__text {
+  font-size: $font-size-base !important;
+}
+
+$headings-font-family: $font-family-headings;
+$headings-font-weight: 700;
+$headings-color: $color-white;
+$headings-text-transform: uppercase;
+
+$font-size-h1:              36px;
+$font-size-h2:              24px;
+$font-size-h3:              20px;
+$font-size-h4:              $font-size-base * 1.2;
+$font-size-h5:              $font-size-base * 1.1;
+$font-size-h6:              $font-size-base * 1;
+
+h1, h2, h3, h4, h5, h6,
+.order-list__item-title {
+  font-family: $headings-font-family;
+  line-height: $line-height-base;
+  font-weight: $headings-font-weight;
+  text-transform: $headings-text-transform;
+  color: $headings-color;
+  // margin: 0;
+  margin-top: 0;
+  
+  line-height: 1.15;
+  letter-spacing: 0;
+  text-align: left;
+}
+
+h3 {
+  color: $color-light-gray;
+}
+
+p,
+.container p {
+  margin-bottom: 1em;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+h1, h2, h3  {
+  margin-bottom: 1em;
+}
+
+h4, h5, h6 {
+  margin-bottom: 0.5em;
+}
+
+h1 {
+  font-size: $font-size-h1;
+}
+h2 {
+  font-size: $font-size-h2;
+}
+h3 {
+  font-size: $font-size-h3;
+}
+h4 {
+  font-size: $font-size-h4;
+}
+h5 {
+  font-size: $font-size-h5;
+}
+h6 {
+  font-size: $font-size-h6;
+}
+
+a {
+  color: $text-color;
+}
+
+.shop-name__cell {
+  text-align: center !important;
+  padding: 20px 0 30px;
+
+  img {
+    width: 150px;
+    height: 66px;
+  }
+}
+
+
+td.section__cell {
+  padding: 25px 0 !important;
+
+  h3 {
+    text-align: center;
+  }
+}
+
+
+// .content__cell h2,
+// .content__cell p {
+//   text-align: center;
+// }
+
+.order-number__cell {
+  text-align: center !important;
+  padding-bottom: 40px;
+}
+
+@media (max-width: 600px) {
+  .order-number__cell.order-number__cell {
+    text-align: center !important;
+  }
+}
+
+.order-number__text {
+  font-weight: bold;
+}
+
+.button__cell {
+  border-radius: 100px;
+  background-color: $color-neon;
+  color: $color-black;
+  font-weight: normal;
+}
+
+
+.button__text {
+  padding: 12px 25px;
+  border: none;
+  color: $color-black;
+  font-weight: normal;
+}
+
+.order-list__item {
+  border-top: none !important;
+  border-top-width: 0 !important;
+}
+
+.order-list__item__cell {
+  border-top: none;
+}
+
+.order-list__product-image {
+  border: none;
+  border-radius: 0;
+}
+
+.order-list__item-variant {
+  display: inline-block;
+  margin-top: 5px;
+}
+
+.order-list__item-discount-allocation {
+  img {
+    display: none;
+  }
+
+  span {
+    margin: 0;
+    font-size: 12px;
+  }
+}
+
+.discount-tag-icon {
+  display: none;
+}
+
+.total-discount--amount {
+  color: $text-color !important;
+}
+
+.subtotal-table__line {
+  border-top: none;
+  border-bottom: none;
+}
+
+.subtotal-table--total {
+  margin-top: 0;
+  border-top: none;
+}
+
+.customer-info__item-credit {
+  filter: grayscale(1);
+}
+
+.subtotal-line td {
+  padding: 2px 0 !important;
+}
+
+.subtotal-lines {
+  border-top: none !important;
+}
+
+.subtotal-line__discount-title {
+  color: $color-light-gray !important;
+}
+
+.row.footer {
+  border-top: none !important;
+}
+
+// .shop-name__cell,
+// .order-number__cell.order-number__cell {
+//   text-align: center !important;
+// }
+
+.footer__cell {
+  padding: 28px 0;
+  text-align: center;
+
+  .container {
+    text-align: center;
+  }
+}
+
+.order-number__text {
+  display: block;
+  width: 100%;
+}
+
+.section__cell h2 {
+  text-align: center;
+}
+
+.order-list__item-variant,
+.order-list__item-discount-allocation {
+  margin-top: 0 !important;
+}
+
+.disclaimer__subtext a,
+.link__cell a {
+  border-bottom: 1px solid;
+}
+
+.disclaimer__subtext {
+  text-align: center;
+}
+
+// force small screen styles on all screens
+
+.main-action-cell {
+  float: none !important; margin-right: 0 !important;
+}
+.secondary-action-cell {
+  text-align: center; width: 100%;
+}
+.header {
+  margin-top: 20px !important; margin-bottom: 2px !important;
+}
+.shop-name__cell {
+  display: block;
+}
+.order-number__cell {
+  display: block;
+}
+.button {
+  width: 100%;
+}
+.apple-wallet-button {
+  text-align: center;
+}
+.customer-info__item {
+  display: block; width: 100% !important;
+}
+
+.subtotal-spacer {
+  display: none;
+}
+
+.spacer {
+  min-width: 0;
+  width: 100%;
+}

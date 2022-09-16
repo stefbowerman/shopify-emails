@@ -1,0 +1,92 @@
+{% capture email_title %}Your shipping status has been updated{% endcapture %}
+{% capture email_body %}The following items have been updated with new shipping information.{% endcapture %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{ email_title }}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" type="text/css" href="/assets/notifications/styles.css">
+
+    <!-- inject-style src="./styles.min.css" -->
+  </head>
+
+  <body>
+    <table class="body">
+      <tr>
+        <td>
+          @@include('./snippets/header.liquid')
+
+          <table class="row content">
+            <tr>
+              <td class="content__cell">
+                <center>
+                  <table class="container">
+                    <tr>
+                      <td>
+                        <h2>{{ email_title }}</h2>
+                        <p>{{ email_body }}</p>
+                        <p>{{ email_emphasis }}</p>
+
+                        @@include('./snippets/call_to_action.liquid')
+
+                        {% if fulfillment.tracking_numbers.size > 0 %}
+                          <p class="disclaimer__subtext">
+                            <br/>
+                            {% if fulfillment.tracking_numbers.size == 1 and fulfillment.tracking_company and fulfillment.tracking_url %}
+                              {{ fulfillment.tracking_company }} tracking number: <a href="{{ fulfillment.tracking_url }}">{{ fulfillment.tracking_numbers.first }}</a>
+                            {% elsif fulfillment.tracking_numbers.size == 1 %}
+                              Tracking number: {{ fulfillment.tracking_numbers.first }}
+                            {% else %}
+                              Tracking numbers:<br />
+                              {% for tracking_number in fulfillment.tracking_numbers %}
+                                {{ tracking_number }}<br />
+                              {% endfor %}
+                            {% endif %}
+                          </p>
+                        {% endif %}
+                      </td>
+                    </tr>
+                  </table>
+                </center>
+              </td>
+            </tr>
+          </table>
+
+          <table class="row section">
+            <tr>
+              <td class="section__cell">
+                <center>
+                  <table class="container">
+                    <tr>
+                      <td>
+                        <h3>Items in this shipment</h3>
+                      </td>
+                    </tr>
+                  </table>
+                  <table class="container">
+                    <tr>
+                      <td>
+                        <table class="row">
+                          {% for _line in fulfillment.fulfillment_line_items %}
+                            {% assign line = _line.line_item %}
+                            
+                            @@include('./snippets/order_list_item.liquid')
+                          {% endfor %}
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </center>
+              </td>
+            </tr>
+          </table>
+
+          @@include('./snippets/footer.liquid')
+
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

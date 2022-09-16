@@ -1,0 +1,52 @@
+<tr class="order-list__item">
+  <td class="order-list__item__cell">
+    <table>
+      <td>
+        {% if line.image %}
+          <img src="{{ line | img_url: 'compact_cropped' }}" align="left" width="60" height="60" class="order-list__product-image"/>
+        {% endif %}
+      </td>
+
+      <td class="order-list__product-description-cell">
+        {% if line.product.title %}	
+          {% assign line_title = line.product.title %}	
+        {% else %}	
+          {% assign line_title = line.title %}	
+        {% endif %}
+
+        {% if line.quantity < line.quantity %}
+          {% capture line_display %} {{ line.quantity }} of {{ line.quantity }} {% endcapture %}
+        {% else %}
+          {% assign line_display = line.quantity %}
+        {% endif %}
+
+        <span class="order-list__item-title">{{ line_title }}&nbsp;&times;&nbsp;{{ line_display }}</span>
+
+        {% if line.variant.title != blank and line.variant.title != 'Default Title' %}
+          <br/><span class="order-list__item-variant">{{ line.variant.title }}</span>
+        {% endif %}
+
+        {% if line.selling_plan_allocation %}
+          <br/><span class="order-list__item-variant">{{ line.selling_plan_allocation.selling_plan.name }}</span>
+        {% endif %}
+
+        {% if line.refunded_quantity > 0 %}
+          <br/><span class="order-list__item-refunded">Refunded</span>
+        {% endif %}
+      </td>
+
+      <td class="order-list__price-cell">
+        {% if line.original_line_price != line.final_line_price %}
+          <del class="order-list__item-original-price">{{ line.original_line_price | money }}</del>
+        {% endif %}
+        <p class="order-list__item-price">
+          {% if line.final_line_price > 0 %}
+            {{ line.final_line_price | money }}
+          {% else %}
+            Free
+          {% endif %}
+        </p>
+      </td>
+    </table>
+  </td>
+</tr>

@@ -1,0 +1,168 @@
+{% capture email_title %} Your payment couldn’t be processed for order {{ order_name }} {% endcapture %}
+{% capture email_body %}
+  You have not been charged. Click below to try paying for the order again.
+{% endcapture %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{ email_title }}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" type="text/css" href="/assets/notifications/styles.css">
+
+    <!-- inject-style src="./styles.min.css" -->
+  </head>
+
+  <body>
+    <table class="body">
+      <tr>
+        <td>
+          @@include('./snippets/header.liquid')
+
+          <table class="row content">
+            <tr>
+              <td class="content__cell">
+                <center>
+                  <table class="container">
+                    <tr>
+                      <td>
+                        <h2>{{ email_title }}</h2>
+                        <p>{{ email_body }}</p>
+                        
+                        @@include('./snippets/call_to_action.liquid')
+
+                      </td>
+                    </tr>
+                  </table>
+                </center>
+              </td>
+            </tr>
+          </table>
+
+          <table class="row section">
+            <tr>
+              <td class="section__cell">
+                <center>
+                  <table class="container">
+                    <tr>
+                      <td>
+                        <h3>Order summary</h3>
+                      </td>
+                    </tr>
+                  </table>
+                  <table class="container">
+                    <tr>
+                      <td>
+                        <table class="row">
+                          {% for line in subtotal_line_items %}
+                            @@include('./snippets/order_list_item.liquid')
+                          {% endfor %}
+                        </table>
+
+                        <table class="row subtotal-lines">
+                          <tr>
+                            <td class="subtotal-spacer"></td>
+                            <td>
+                              <table class="row subtotal-table">
+                                @@include('./snippets/subtotal_table_discount_lines.liquid')
+
+                                
+                                @@include('./snippets/subtotal_table_subtotal_line.liquid')
+
+                                
+                                @@include('./snippets/subtotal_table_shipping_line.liquid')
+                                
+                                <tr class="subtotal-line">
+                                  <td class="subtotal-line__title">
+                                    <p>
+                                      <span>Taxes</span>
+                                    </p>
+                                  </td>
+                                  <td class="subtotal-line__value">
+                                    <strong>{{ tax_price | money }}</strong>
+                                  </td>
+                                </tr>
+
+
+                                @@include('./snippets/subtotal_table_tip_line.liquid')
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+
+                        {% if total_price > total_outstanding %}
+                          <table class="row subtotal-lines">
+                            <tr>                              
+                              <td class="subtotal-spacer"></td>
+                              <td>
+                                <table class="row subtotal-table">
+                                  <tr class="subtotal-line">
+                                    <td class="subtotal-line__title">
+                                      <p>
+                                        <span>Updated total</span>
+                                      </p>
+                                    </td>
+                                    <td class="subtotal-line__value">
+                                      <strong>{{ total_price | money }}</strong>
+                                    </td>
+                                  </tr>
+
+                                  <tr class="subtotal-line">
+                                    <td class="subtotal-line__title">
+                                      <p>
+                                        <span>Already paid</span>
+                                      </p>
+                                    </td>
+                                    <td class="subtotal-line__value">
+                                      <strong>{{ net_payment | money }}</strong>
+                                    </td>
+                                  </tr>
+                                </table>
+
+                                <table class="row subtotal-table subtotal-table--total">
+                                  <tr class="subtotal-line">
+                                    <td class="subtotal-line__title">
+                                      <p>
+                                        <span>Amount to pay</span>
+                                      </p>
+                                    </td>
+                                    <td class="subtotal-line__value">
+                                      <strong>{{ total_outstanding | money }}</strong>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                        {% else %}
+                          <table class="row subtotal-table subtotal-table--total">
+                            <tr class="subtotal-line">
+                              <td class="subtotal-line__title">
+                                <p>
+                                  <span>Amount to pay</span>
+                                </p>
+                              </td>
+                              <td class="subtotal-line__value">
+                                <strong>{{ total_outstanding | money }}</strong>
+                              </td>
+                            </tr>
+                          </table>
+                        {% endif %}
+                      </td>
+                    </tr>
+                  </table>
+                </center>
+              </td>
+            </tr>
+          </table>
+
+          @@include('./snippets/customer_summary.liquid')
+
+          @@include('./snippets/footer.liquid')
+
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

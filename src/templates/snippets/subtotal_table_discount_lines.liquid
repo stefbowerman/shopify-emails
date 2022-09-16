@@ -1,0 +1,27 @@
+{% for discount_application in discount_applications %}
+  {% if discount_application.target_selection == 'all' %}
+    {% capture discount_title %}
+      {% if discount_application.title %}
+      {{ discount_application.title | upcase }}
+      {% else %}
+      Discount
+      {% endif %}
+    {% endcapture %}
+
+    <tr class="subtotal-line">
+      <td class="subtotal-line__title">
+        <p>
+          <span>Discount</span>
+            <span class="subtotal-line__discount">
+              <img src="{{ 'notifications/discounttag.png' | shopify_asset_url }}" width="18" height="18" class="discount-tag-icon" />
+              <span class="subtotal-line__discount-title">{{ discount_title }}</span>
+            </span>
+        </p>
+      </td>
+      <td class="subtotal-line__value">
+        <strong>-{{ discount_application.total_allocated_amount | money }}</strong>
+      </td>
+    </tr>
+
+  {% endif %}
+{% endfor %}

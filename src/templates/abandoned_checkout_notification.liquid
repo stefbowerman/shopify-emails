@@ -1,0 +1,98 @@
+{% capture email_title %}
+  {% if item_count == 1 %}
+    You left an item in your cart
+  {% else %}
+    You left items in your cart
+  {% endif %}
+{% endcapture %}
+{% capture email_body %}
+  {% if billing_address.first_name %}
+    {% if item_count == 1 %}
+      Hi {{ billing_address.first_name }}, you added an item to your shopping cart and haven't completed your purchase. You can complete it now while it's still available.
+    {% else %}
+      Hi {{ billing_address.first_name }}, you added items to your shopping cart and haven't completed your purchase. You can complete it now while they're still available.
+    {% endif %}
+  {% else %}
+    {% if item_count == 1 %}
+      Hi, you added an item to your shopping cart and haven't completed your purchase. You can complete it now while it's still available.
+    {% else %}
+      Hi, you added items to your shopping cart and haven't completed your purchase. You can complete it now while they're still available.
+    {% endif %}
+  {% endif %}
+{% endcapture %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{ email_title }}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" type="text/css" href="/assets/notifications/styles.css">
+
+    <!-- inject-style src="./styles.min.css" -->
+  </head>
+
+  <body>
+    <table class="body">
+      <tr>
+        <td>
+          @@include('./snippets/header.liquid')
+
+          <table class="row content">
+            <tr>
+              <td class="content__cell">
+                <center>
+                  <table class="container">
+                    <tr>
+                      <td>
+                        
+                      <h2>{{ email_title }}</h2>
+                      {% if custom_message != blank %}
+                        <p>{{ custom_message }}</p>
+                      {% else %}
+                        <p>{{ email_body }}</p>
+                      {% endif %}
+
+                      @@include('./snippets/call_to_action.liquid')
+
+                      </td>
+                    </tr>
+                  </table>
+                </center>
+              </td>
+            </tr>
+          </table>
+
+          <table class="row section">
+            <tr>
+              <td class="section__cell">
+                <center>
+                  <table class="container">
+                    <tr>
+                      <td>
+                        <h3>Complete your purchase</h3>
+                      </td>
+                    </tr>
+                  </table>
+                  <table class="container">
+                    <tr>
+                      <td>
+                        <table class="row">
+                          {% for line in subtotal_line_items %}
+                            @@include('./snippets/order_list_item.liquid')
+                          {% endfor %}
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </center>
+              </td>
+            </tr>
+          </table>
+
+          @@include('./snippets/footer.liquid')
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

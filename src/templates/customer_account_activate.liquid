@@ -1,0 +1,51 @@
+{% capture email_title %}Activate your account{% endcapture %}
+{% capture email_body %}Hi, you've created a new customer account at <a href="{{shop.url}}">{{shop.name}}</a>. All you have to do is activate it.{% endcapture %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{ email_title }}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" type="text/css" href="/assets/notifications/styles.css">
+
+    <!-- inject-style src="./styles.min.css" -->
+  </head>
+
+  <body>
+    <table class="body">
+      <tr>
+        <td>
+          @@include('./snippets/header.liquid')
+
+          <table class="row content">
+            <tr>
+              <td class="content__cell">
+                <center>
+                  <table class="container">
+                    <tr>
+                      <td>
+                        <h2>{{ email_title }}</h2>
+                        {% if custom_message != blank %}
+                          <p>{{ custom_message }}</p>
+                        {% else %}
+                          <p>{{ email_body }}</p>
+                        {% endif %}
+
+                        @@include('./snippets/call_to_action.liquid', {
+                          "customer_button": '<td class="button__cell"><a href="{{ customer.account_activation_url }}" class="button__text">Activate your account</a></td>'
+                        })                        
+                      </td>
+                    </tr>
+                  </table>
+                </center>
+              </td>
+            </tr>
+          </table>
+
+          @@include('./snippets/footer.liquid')
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+<table class="row footer">
+  {% if order_name %%}
+    {% if shop.refund_policy %}  
+      <tr>
+        <td class="footer__cell">
+          <center>
+            <table class="container">
+              <tr>
+                <td>
+                  {{ shop.refund_policy }}
+                </td>
+              </tr>
+            </table>
+          </center>
+        </td>
+      </tr>
+    {% endif %}
+
+    {% if shop.shipping_policy %}  
+      <tr>
+        <td class="footer__cell">
+          <center>
+            <table class="container">
+              <tr>
+                <td>
+                  {{ shop.shipping_policy }}
+                </td>
+              </tr>
+            </table>
+          </center>
+        </td>
+      </tr>
+    {% endif %}
+  {% endif %}
+  <tr>
+    <td class="footer__cell">
+      <center>
+        <table class="container">
+          <tr>
+            <td>
+              {% if unsubscribe_url %}
+                <p class="disclaimer__subtext">Don't want to receive cart reminders from us? <a href="{{ unsubscribe_url }}">Unsubscribe</a></p>
+              {% else %}
+                <p class="disclaimer__subtext">If you have any questions, reply to this email or contact us at <a href="mailto:{{ shop.email }}">{{ shop.email }}</a></p>
+              {% endif %}
+            </td>
+          </tr>
+        </table>
+      </center>
+    </td>
+  </tr>
+</table>
+  
+<img src="{{ 'notifications/spacer.png' | shopify_asset_url }}" class="spacer" height="1" />
